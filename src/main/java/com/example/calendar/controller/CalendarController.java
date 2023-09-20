@@ -1,8 +1,10 @@
 package com.example.calendar.controller;
 
+import com.example.calendar.model.Event;
 import com.example.calendar.model.date.Day;
 import com.example.calendar.model.date.Month;
 import com.example.calendar.model.date.Week;
+import com.example.calendar.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,8 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class CalendarController {
+
+    private final EventService eventService;
 
     @GetMapping("/calendar")
     public String showCalendar(Model model) {
@@ -29,8 +33,20 @@ public class CalendarController {
 
         model.addAttribute("monthNames", monthNames);
         model.addAttribute("months", months);
+        model.addAttribute("events", eventService.getAllEvents());
 
         return "calendar";
+    }
+
+    public String getEventNames(List<Event> events) {
+        StringBuilder sb = new StringBuilder();
+        for (Event event : events) {
+            sb.append(event.getName()).append(", ");
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 2); // Удаляем последнюю запятую и пробел
+        }
+        return sb.toString();
     }
 
     private List<Month> generateCalendarMonths(int year) {
