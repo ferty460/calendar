@@ -13,5 +13,6 @@ public class Day {
 
     private int dayOfMonth;
     private String dayOfWeek;
+    private boolean empty;
 
 }

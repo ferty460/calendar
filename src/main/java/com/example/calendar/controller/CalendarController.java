@@ -1,6 +1,5 @@
 package com.example.calendar.controller;
 
-import com.example.calendar.model.Event;
 import com.example.calendar.model.date.Day;
 import com.example.calendar.model.date.Month;
 import com.example.calendar.model.date.Week;
@@ -38,17 +37,6 @@ public class CalendarController {
         return "calendar";
     }
 
-    public String getEventNames(List<Event> events) {
-        StringBuilder sb = new StringBuilder();
-        for (Event event : events) {
-            sb.append(event.getName()).append(", ");
-        }
-        if (sb.length() > 0) {
-            sb.setLength(sb.length() - 2); // Удаляем последнюю запятую и пробел
-        }
-        return sb.toString();
-    }
-
     private List<Month> generateCalendarMonths(int year) {
         List<Month> months = new ArrayList<>();
 
@@ -66,26 +54,55 @@ public class CalendarController {
     private List<Week> generateCalendarWeeks(int month, int year) {
         List<Week> weeks = new ArrayList<>();
         LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
-        int daysInMonth = firstDayOfMonth.lengthOfMonth();
+        int startDayOfWeek = firstDayOfMonth.getDayOfWeek().getValue();
+
+        List<Day> days = new ArrayList<>();
+        addEmptyDaysIfNecessary(startDayOfWeek, days);
+
         int currentDay = 1;
+        int daysInMonth = firstDayOfMonth.lengthOfMonth();
 
         while (currentDay <= daysInMonth) {
-            Week week = new Week();
-            List<Day> days = new ArrayList<>();
+            Day day = createDay(firstDayOfMonth, currentDay);
+            days.add(day);
+            currentDay++;
 
-            for (int i = 0; i < 7; i++) {
-                if (currentDay <= daysInMonth) {
-                    Day day = new Day();
-                    day.setDayOfMonth(currentDay);
-                    day.setDayOfWeek(firstDayOfMonth.plusDays(currentDay - 1).getDayOfWeek().toString());
-                    days.add(day);
-                    currentDay++;
-                }
+            if (days.size() == 7) {
+                weeks.add(new Week(new ArrayList<>(days)));
+                days.clear();
             }
-            week.setDays(days);
-            weeks.add(week);
         }
 
+        addEmptyDaysAtMonthEnd(currentDay, days, daysInMonth, weeks);
+
         return weeks;
+    }
+
+    private void addEmptyDaysIfNecessary(int startDayOfWeek, List<Day> days) {
+        if (startDayOfWeek != 1) {
+            for (int i = 1; i < startDayOfWeek; i++) {
+                Day emptyDay = new Day();
+                emptyDay.setEmpty(true);
+                days.add(emptyDay);
+            }
+        }
+    }
+
+    private Day createDay(LocalDate firstDayOfMonth, int currentDay) {
+        Day day = new Day();
+        day.setDayOfMonth(currentDay);
+        day.setDayOfWeek(firstDayOfMonth.plusDays(currentDay - 1).getDayOfWeek().toString());
+        return day;
+    }
+
+    private void addEmptyDaysAtMonthEnd(int currentDay, List<Day> days, int daysInMonth, List<Week> weeks) {
+        if (!days.isEmpty() && currentDay > daysInMonth) {
+            while (days.size() < 7) {
+                Day emptyDay = new Day();
+                emptyDay.setEmpty(true);
+                days.add(emptyDay);
+            }
+            weeks.add(new Week(new ArrayList<>(days)));
+        }
     }
 }

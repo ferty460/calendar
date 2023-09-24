@@ -130,8 +130,8 @@
                     </thead>
                     <tbody>
                     <tr th:each="week : ${month.weeks}">
-                        <td th:each="day : ${week.days}" th:attr="tooltip=${day.dayOfMonth + ' ' + monthNames[month.month - 1]}">
-                            <span th:text="${day.dayOfMonth}"></span>
+                        <td th:each="day : ${week.days}">
+                            <span th:if="${not day.empty}" th:attr="tooltip=${day.dayOfMonth + ' ' + monthNames[month.month - 1]}" th:text="${day.dayOfMonth}"></span>
                         </td>
                     </tr>
                     </tbody>
@@ -139,9 +139,9 @@
                 <div>
                     <table class="table">
                     <th:block th:each="event : ${events}">
-                        <th:block th:if="${event.getDate().replaceAll('^0+','').substring(0,1) == '' + month.month}">
+                        <th:block th:if="${event.getDate().toString().substring(5,7).replaceAll('^0+','') == '' + month.month}">
                             <tr>
-                                <td th:text="${event.getDate().substring(3,5)}"></td>
+                                <td th:text="${event.getFormattedDate().replaceAll('^0+','')}"></td>
                                 <td th:text="${event.name}"></td>
                             </tr>
                         </th:block>

@@ -4,105 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <style>
-        /* START TOOLTIP STYLES */
-        [tooltip] {
-          position: relative; /* opinion 1 */
-        }
-
-        /* Applies to all tooltips */
-        [tooltip]::before,
-        [tooltip]::after {
-          text-transform: none; /* opinion 2 */
-          font-size: .9em; /* opinion 3 */
-          line-height: 1;
-          user-select: none;
-          pointer-events: none;
-          position: absolute;
-          display: none;
-          opacity: 0;
-        }
-        [tooltip]::before {
-          content: '';
-          border: 5px solid transparent; /* opinion 4 */
-          z-index: 1001; /* absurdity 1 */
-        }
-        [tooltip]::after {
-          content: attr(tooltip); /* magic! */
-
-          /* most of the rest of this is opinion */
-          font-family: Helvetica, sans-serif;
-          text-align: center;
-
-          /*
-            Let the content set the size of the tooltips
-            but this will also keep them from being obnoxious
-            */
-          min-width: 3em;
-          max-width: 21em;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          padding: 1ch 1.5ch;
-          border-radius: .3ch;
-          box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, 0.35);
-          background: #333;
-          color: #fff;
-          z-index: 1000; /* absurdity 2 */
-        }
-
-        /* Make the tooltips respond to hover */
-        [tooltip]:hover::before,
-        [tooltip]:hover::after {
-          display: block;
-        }
-
-        /* don't show empty tooltips */
-        [tooltip='']::before,
-        [tooltip='']::after {
-          display: none !important;
-        }
-
-        /* FLOW: UP */
-        [tooltip]:not([flow])::before,
-        [tooltip][flow^="up"]::before {
-          bottom: 100%;
-          border-bottom-width: 0;
-          border-top-color: #333;
-        }
-        [tooltip]:not([flow])::after,
-        [tooltip][flow^="up"]::after {
-          bottom: calc(100% + 5px);
-        }
-        [tooltip]:not([flow])::before,
-        [tooltip]:not([flow])::after,
-        [tooltip][flow^="up"]::before,
-        [tooltip][flow^="up"]::after {
-          left: 50%;
-          transform: translate(-50%, -.5em);
-        }
-
-        /* KEYFRAMES */
-        @keyframes tooltips-vert {
-          to {
-            opacity: .9;
-            transform: translate(-50%, 0);
-          }
-        }
-
-        @keyframes tooltips-horz {
-          to {
-            opacity: .9;
-            transform: translate(0, -50%);
-          }
-        }
-
-        /* FX All The Things */
-        [tooltip]:not([flow]):hover::before,
-        [tooltip]:not([flow]):hover::after {
-          animation: tooltips-vert 300ms ease-out forwards;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
     <title>Календарь</title>
 </head>
 <body class="d-flex h-100 text-center text-dark">
@@ -130,8 +32,8 @@
                     </thead>
                     <tbody>
                     <tr th:each="week : ${month.weeks}">
-                        <td th:each="day : ${week.days}" th:attr="tooltip=${day.dayOfMonth + ' ' + monthNames[month.month - 1] + ' ' + getEventNames(events)}">
-                            <span th:text="${day.dayOfMonth}"></span>
+                        <td th:each="day : ${week.days}">
+                            <span th:if="${not day.empty}" th:attr="tooltip=${day.dayOfMonth + ' ' + monthNames[month.month - 1]}" th:text="${day.dayOfMonth}"></span>
                         </td>
                     </tr>
                     </tbody>
@@ -139,9 +41,9 @@
                 <div>
                     <table class="table">
                     <th:block th:each="event : ${events}">
-                        <th:block th:if="${event.getDate().replaceAll('^0+','').substring(0,1) == '' + month.month}">
+                        <th:block th:if="${event.getDate().toString().substring(5,7).replaceAll('^0+','') == '' + month.month}">
                             <tr>
-                                <td th:text="${event.getDate().substring(3,5)}"></td>
+                                <td th:text="${event.getFormattedDate().replaceAll('^0+','')}"></td>
                                 <td th:text="${event.name}"></td>
                             </tr>
                         </th:block>

@@ -3,12 +3,13 @@ package com.example.calendar.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 @Data
@@ -24,10 +25,14 @@ public class Event {
 
     private String description;
 
-    @DateTimeFormat(pattern = "MM-dd")
-    private String date;
+    private Date date;
 
-    public Event(String name, String description, String date) {
+    public String getFormattedDate() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        return simpleDateFormat.format(date);
+    }
+
+    public Event(String name, String description, Date date) {
         this.name = name;
         this.description = description;
         this.date = date;

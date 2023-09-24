@@ -23,11 +23,7 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public void save(String name, String description, String date) {
-        String[] dateParts = date.split("-");
-        String dateToDb = dateParts[1].concat("-").concat(dateParts[2]);
-        Event event = new Event(name, description, dateToDb);
-
+    public void save(Event event) {
         eventRepository.save(event);
         log.info("Saving new Event: {}", event);
     }
