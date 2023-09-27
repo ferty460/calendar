@@ -102,6 +102,17 @@
         [tooltip]:not([flow]):hover::after {
           animation: tooltips-vert 300ms ease-out forwards;
         }
+
+        .table-cell:hover {
+            background-color: #696969;
+            color: #ffffff;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav__link:hover {
+            text-decoration: underline;
+            transition: text-decoration 0.3s ease;
+        }
     </style>
     <title>Календарь</title>
 </head>
@@ -130,9 +141,11 @@
                     </thead>
                     <tbody>
                     <tr th:each="week : ${month.weeks}">
-                        <td th:each="day : ${week.days}">
-                            <span th:if="${not day.empty}" th:attr="tooltip=${day.dayOfMonth + ' ' + monthNames[month.month - 1]}" th:text="${day.dayOfMonth}"></span>
-                        </td>
+                        <th:block th:each="day : ${week.days}">
+                            <td th:attr="tooltip=${day.dayOfMonth + ' ' + monthNames[month.month - 1] + '&#013;' + @calendarUtil.checkEventsInDay(events, day)}" class="table-cell">
+                                <span th:if="${not day.empty}" th:text="${day.dayOfMonth}" class="table-cell-hover"></span>
+                            </td>
+                        </th:block>
                     </tr>
                     </tbody>
                 </table>
