@@ -5,10 +5,7 @@ import com.example.calendar.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,12 +22,19 @@ public class EventController {
         return "main";
     }
 
-    @GetMapping("/event/all")
+    @GetMapping("/event")
     public String getAllEvents(Model model) {
         model.addAttribute("events", eventService.getAllEvents());
         model.addAttribute("event", new Event());
 
         return "event";
+    }
+
+    @GetMapping("/event/{id}")
+    public String eventInfo(@PathVariable Long id, Model model) {
+        model.addAttribute("event", eventService.getEventById(id));
+
+        return "event-info";
     }
 
     @PostMapping("/event/add")
@@ -45,6 +49,12 @@ public class EventController {
         }
         model.addAttribute("events", eventService.getAllEvents());
 
-        return "redirect:/event/all";
+        return "redirect:/event";
+    }
+
+    @PostMapping("/event/delete/{id}")
+    public String deleteEvent(@PathVariable Long id) {
+        eventService.deleteEvent(id);
+        return "redirect:/event";
     }
 }

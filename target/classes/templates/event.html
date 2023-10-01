@@ -3,46 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-    <title>events</title>
+    <title>Календарь | Все события</title>
 </head>
 <body class="d-flex h-100 text-center text-dark">
 
 <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column min-vh-100">
 
-    <div th:insert="blocks/header.html :: header"></div>
+    <div class="mb-auto" th:replace="blocks/header.html :: header"></div>
 
     <div class="container">
-        <div>
-            <form action="/event/add" method="post" th:object="${event}">
-                <input type="text" name="name" placeholder="Название" th:field="*{name}" required><br>
-                <input type="text" name="description" placeholder="Описание" th:field="*{description}" required><br>
-                <input type="date" name="dateString" required><br>
+        <div class="d-flex flex-row flex-wrap justify-content-between mt-5 mb-5">
+            <div class="justify-content-center">
+                <form action="/event/add" method="post" th:object="${event}">
+                    <input type="text" name="name" placeholder="Название" th:field="*{name}" class="form-control" required><br>
+                    <input type="text" name="description" placeholder="Описание" th:field="*{description}" class="form-control" required><br>
+                    <input type="date" name="dateString" class="form-control" required><br>
 
-                <input type="submit" value="Добавить">
-            </form>
+                    <input type="submit" value="Добавить" class="btn btn-dark">
+                </form>
+            </div>
         </div>
 
         <div>
             <h3>Список событий</h3>
 
-            <table>
+            <table class="table table-bordered">
                 <thead>
-                <tr>
-                    <th>id</th>
+                <tr class="table-secondary text-dark">
                     <th>name</th>
                     <th>description</th>
                     <th>date</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="event : ${events}">
-                    <td th:text="${event.id}"></td>
+                <tr th:each="event : ${events}" class="table-light text-dark">
                     <td th:text="${event.name}"></td>
                     <td th:text="${event.description}"></td>
                     <td th:text="${event.getFormattedDate()}"></td>
+                    <td><a th:href="@{/event/{id}(id=${event.id})}">Подробнее</a></td>
                 </tr>
                 </tbody>
             </table>

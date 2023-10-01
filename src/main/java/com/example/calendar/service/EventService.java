@@ -27,4 +27,13 @@ public class EventService {
         eventRepository.save(event);
         log.info("Saving new Event: {}", event);
     }
+
+    public void deleteEvent(Long id) {
+        eventRepository.deleteById(id);
+        log.info("Deleting event with id: {}", id);
+    }
+
+    public Event getEventById(Long id) {
+        return eventRepository.findById(id).orElse(null);
+    }
 }
