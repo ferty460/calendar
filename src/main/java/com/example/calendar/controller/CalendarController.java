@@ -25,7 +25,7 @@ public class CalendarController {
 
     @GetMapping("/calendar")
     public String showCalendar(Model model) {
-        List<Month> months = generateCalendarMonths(2023);
+        List<Month> months = generateCalendarMonths(LocalDate.now().getYear());
         String[] monthNames = {
                 "Январь", "Февраль",
                 "Март", "Апрель", "Май",

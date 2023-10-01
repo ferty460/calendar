@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,6 +26,23 @@ public class Event {
     private String description;
 
     private Date date;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "event")
+    private List<Image> images = new ArrayList<>();
+
+    private Long previewImageId;
+
+    private LocalDateTime dateOfCreated;
+
+    public void addImageToProduct(Image image) {
+        image.setEvent(this);
+        images.add(image);
+    }
+
+    @PrePersist
+    private void init() {
+        dateOfCreated = LocalDateTime.now();
+    }
 
     public String getFormattedDate() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");

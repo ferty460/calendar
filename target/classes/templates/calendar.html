@@ -88,7 +88,7 @@
                         <th:block th:if="${event.getDate().toString().substring(5,7).replaceAll('^0+','') == '' + month.month}">
                             <tr>
                                 <td th:text="${event.getFormattedDate().replaceAll('^0+','')}"></td>
-                                <td th:text="${event.name}"></td>
+                                <td><a th:text="${event.name}" th:href="@{/event/{id}(id=${event.id})}"></a></td>
                             </tr>
                         </th:block>
                     </th:block>
