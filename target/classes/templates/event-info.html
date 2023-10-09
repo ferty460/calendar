@@ -15,8 +15,8 @@
     <div class="container mt-5 mb-5">
         <h3 class="mb-5" th:text="'Подробная информация о событии ' + ${event.name}"></h3>
         <div class="d-flex flex-row">
-            <div th:each="image : ${images}" class="mr-2">
-                <img th:src="@{/images/{img}(img=${image.id})}" height="150px">
+            <div th:each="image : ${images}" class="justify-content-evenly mb-3">
+                <img th:src="@{/images/{img}(img=${image.id})}" height="150px"/>
             </div>
         </div>
         <b>Событие: </b><span th:text="${event.name}"></span><br>
