@@ -33,6 +33,7 @@ public class CalendarController {
         model.addAttribute("monthNames", monthNames);
         model.addAttribute("months", months);
         model.addAttribute("events", eventService.getAllEvents());
+        model.addAttribute("nearestEvents", eventService.getNearestEvents());
 
         return "calendar";
     }

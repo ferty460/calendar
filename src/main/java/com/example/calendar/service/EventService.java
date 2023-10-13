@@ -39,12 +39,16 @@ public class EventService {
         Event eventFromDb = eventRepository.save(event);
         eventFromDb.setPreviewImageId(eventFromDb.getImages().get(0).getId());
         eventRepository.save(event);
-        log.info("Saving new Event: {}", event);
+        log.info("Saving new Event: id {}, name {}, description {}, date {}", event.getId(), event.getName(), event.getDescription(), event.getDate());
     }
 
     public void deleteEvent(Long id) {
         eventRepository.deleteById(id);
-        log.info("Deleting event with id: {}", id);
+        log.info("Deleting Event with id: {}", id);
+    }
+
+    public List<Event> getNearestEvents() {
+        return eventRepository.findAllByDateAfterOrderByDateAsc(LocalDate.now());
     }
 
 
