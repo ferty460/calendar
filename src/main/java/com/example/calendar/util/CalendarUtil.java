@@ -14,8 +14,8 @@ public class CalendarUtil {
     public String checkEventsInDay(List<Event> events, Day day, Month month) {
         StringBuilder result = new StringBuilder();
         for (Event event : events) {
-            if (getDay(event).equals("" + day.getDayOfMonth())
-                    && getMonth(event).equals("" + month.getMonth())) {
+            if (getDay(event).equals(String.valueOf(day.getDayOfMonth()))
+                    && getMonth(event).equals(String.valueOf(month.getMonth()))) {
                 result.append("\n");
                 result.append(event.getName());
             }

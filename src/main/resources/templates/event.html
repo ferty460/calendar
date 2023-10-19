@@ -12,17 +12,21 @@
 
     <div class="mb-auto" th:replace="blocks/header.html :: header"></div>
 
-    <div class="container">
+    <div class="container d-flex justify-content-evenly mt-5 mb-5">
         <div class="d-flex flex-row flex-wrap justify-content-between mt-5 mb-5">
             <div class="justify-content-center">
                 <form action="/event/add" method="post" th:object="${event}" enctype="multipart/form-data">
-                    <input type="text" name="name" placeholder="Название" th:field="*{name}" class="form-control" required><br>
-                    <input type="text" name="description" placeholder="Описание" th:field="*{description}" class="form-control" required><br>
-                    <input type="date" name="dateString" class="form-control" required><br>
                     <div>
-                        <input type="file" name="file1" class="form-control mb-3">
-                        <input type="file" name="file2" class="form-control mb-3">
-                        <input type="file" name="file3" class="form-control mb-3">
+                        <div>
+                            <input type="text" name="name" placeholder="Название" th:field="*{name}" class="form-control" required><br>
+                            <input type="text" name="description" placeholder="Описание" th:field="*{description}" class="form-control" required><br>
+                            <input type="date" name="dateString" class="form-control" required><br>
+                        </div>
+                        <div>
+                            <input type="file" name="file1" class="form-control mb-3">
+                            <input type="file" name="file2" class="form-control mb-3">
+                            <input type="file" name="file3" class="form-control mb-3">
+                        </div>
                     </div>
 
                     <input type="submit" value="Добавить" class="btn btn-dark">

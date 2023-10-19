@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -48,9 +47,10 @@ public class EventService {
     }
 
     public List<Event> getNearestEvents() {
-        return eventRepository.findAllByDateAfterOrderByDateAsc(LocalDate.now());
+        LocalDate localDate = LocalDate.now().minusDays(1);
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return eventRepository.findAllByDateAfterOrderByDateAsc(date);
     }
-
 
     private void addImage(MultipartFile file, boolean preview, Event event) throws IOException {
         Image image;

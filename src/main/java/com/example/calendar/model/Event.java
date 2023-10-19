@@ -20,25 +20,22 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
     private String description;
 
-    private Date date;
-
+    // --------  IMAGES  --------
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "event")
     private List<Image> images = new ArrayList<>();
-
     private Long previewImageId;
-
-    private LocalDateTime dateOfCreated;
 
     public void addImageToProduct(Image image) {
         image.setEvent(this);
         images.add(image);
     }
 
+    // --------  DATE  --------
+    private Date date;
+    private LocalDateTime dateOfCreated;
     @PrePersist
     private void init() {
         dateOfCreated = LocalDateTime.now();
@@ -47,11 +44,5 @@ public class Event {
     public String getFormattedDate() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
         return simpleDateFormat.format(date);
-    }
-
-    public Event(String name, String description, Date date) {
-        this.name = name;
-        this.description = description;
-        this.date = date;
     }
 }

@@ -38,6 +38,7 @@ public class CalendarController {
         return "calendar";
     }
 
+
     private List<Month> generateCalendarMonths(int year) {
         List<Month> months = new ArrayList<>();
 

@@ -74,8 +74,8 @@
                         <tbody>
                         <tr th:each="week : ${month.weeks}">
                             <td class="table-cell tooltip1" th:each="day : ${week.days}">
-                                <span th:if="${not day.empty}" th:text="${day.dayOfMonth}" class="table-cell-hover"></span>
-                                <div th:if="${not day.empty}" class="tooltiptext1">
+                                <span th:if="${not day.isEmpty()}" th:text="${day.dayOfMonth}" class="table-cell-hover"></span>
+                                <div th:if="${not day.isEmpty()}" class="tooltiptext1">
                                     <span th:text="${day.dayOfMonth + ' ' + monthNames[month.month - 1]}"></span><br>
                                     <span th:text="${@calendarUtil.checkEventsInDay(events, day, month)}"></span>
                                 </div>
@@ -98,17 +98,14 @@
                 </div>
             </div>
 
-            <div class="d-flex flex-column mb-5" style="padding: 15px;">
-                <div class="card mt-5" style="height: 170px; max-height: 100%;">
+            <div class="d-flex flex-column mb-5" style="width: 25%; padding: 0 15px;">
+                <div class="card mt-5" style="max-height: 100%; padding-bottom: 25px; margin-bottom: 25px;">
                     <div class="card-body">
                         <h3 class="card-title" th:text="${@calendarUtil.getDayOfMonth() + ' ' + @calendarUtil.getMonth()}"></h3>
                         <h4 class="card-text" th:text="${@calendarUtil.getDayOfWeek()}"></h4>
                     </div>
-                    <th:block th:if="${@calendarUtil.checkEventsInDay(events, @calendarUtil.getDay(events), @calendarUtil.getMonth(events))}">
-                        <h4>Событий нет</h4>
-                    </th:block>
                     <ul class="list-group list-group-flush">
-                        <th:block th:each="event : ${events}">
+                        <th:block th:if="${not events == null}" th:each="event : ${events}">
                             <th:block th:if="${event.getDate().toString().substring(5,7).replaceAll('^0+','') == '' + @calendarUtil.getMonthValue()
                                                 && event.getDate().toString().substring(8,10).replaceAll('^0+','') == @calendarUtil.getDayOfMonth()}">
                                 <li class="list-group-item">
@@ -119,12 +116,12 @@
                     </ul>
                 </div>
 
-                <div>
+                <div th:if="${nearestEvents != null}">
                     <h3>Ближайшие события</h3>
                     <table class="table">
                         <th:block th:each="event : ${nearestEvents}">
                             <tr>
-                                <td th:text="${event.getFormattedDate().replaceAll('^0+','')}"></td>
+                                <td th:text="${event.getFormattedDate()?.replaceAll('^0+','')}"></td>
                                 <td><a th:text="${event.name}" th:href="@{/event/{id}(id=${event.id})}"></a></td>
                             </tr>
                         </th:block>
