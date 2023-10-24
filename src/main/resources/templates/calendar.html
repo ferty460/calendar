@@ -105,7 +105,7 @@
                         <h4 class="card-text" th:text="${@calendarUtil.getDayOfWeek()}"></h4>
                     </div>
                     <ul class="list-group list-group-flush">
-                        <th:block th:if="${not events == null}" th:each="event : ${events}">
+                        <th:block th:each="event : ${events}">
                             <th:block th:if="${event.getDate().toString().substring(5,7).replaceAll('^0+','') == '' + @calendarUtil.getMonthValue()
                                                 && event.getDate().toString().substring(8,10).replaceAll('^0+','') == @calendarUtil.getDayOfMonth()}">
                                 <li class="list-group-item">
