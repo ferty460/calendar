@@ -7,7 +7,7 @@
         rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
         crossorigin="anonymous">
-  <title>Календарь</title>
+  <title>Календарь | Регистрация</title>
 </head>
 <body class="d-flex h-100 text-center text-dark">
 <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column min-vh-100">
@@ -15,17 +15,21 @@
   <div class="mb-auto" th:replace="blocks/header.html :: header"></div>
 
   <main>
-    <h3 class="title">Регистрация</h3>
+    <h3 class="title mb-3">Регистрация</h3>
 
-    <form th:method="post" th:action="@{/registration}">
+    <form th:method="post" th:action="@{/registration}" style="width: 30%; margin: 0 auto;">
       <label for="username">Введите имя пользователя</label><br>
-      <input id="username" type="text" name="username" placeholder="Имя пользователя"><br><br>
+      <input id="username" type="text" name="username" placeholder="Имя пользователя" class="form-control"><br><br>
 
       <label for="password">Введите имя пользователя</label><br>
-      <input id="password" type="password" name="password" placeholder="Пароль"><br><br>
+      <input id="password" type="password" name="password" placeholder="Пароль" class="form-control"><br><br>
 
-      <input type="submit" value="Зарегистрироваться">
+      <input type="submit" value="Зарегистрироваться" class="btn btn-dark">
     </form>
+
+    <div th:if="${error}" class="alert-warning">
+      <p th:text="${error}"></p>
+    </div>
   </main>
 
   <div class="mt-auto" th:replace="blocks/footer.html :: footer"></div>

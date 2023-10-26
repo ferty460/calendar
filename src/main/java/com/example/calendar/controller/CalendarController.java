@@ -1,5 +1,6 @@
 package com.example.calendar.controller;
 
+import com.example.calendar.model.User;
 import com.example.calendar.model.date.Day;
 import com.example.calendar.model.date.Month;
 import com.example.calendar.model.date.Week;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class CalendarController {
     private final EventService eventService;
 
     @GetMapping("/calendar")
-    public String showCalendar(Model model) {
+    public String showCalendar(Principal principal, Model model) {
         List<Month> months = generateCalendarMonths(LocalDate.now().getYear());
         String[] monthNames = {
                 "Январь", "Февраль",
@@ -29,11 +31,13 @@ public class CalendarController {
                 "Сентябрь", "Октябрь", "Ноябрь",
                 "Декабрь"
         };
+        User user = eventService.getUserByPrincipal(principal);
 
         model.addAttribute("monthNames", monthNames);
         model.addAttribute("months", months);
-        model.addAttribute("events", eventService.getAllEvents());
-        model.addAttribute("nearestEvents", eventService.getNearestEvents());
+        model.addAttribute("events", eventService.getAllByUser(user));
+        model.addAttribute("nearestEvents", eventService.getNearestEvents(user));
+        model.addAttribute("user", user);
 
         return "calendar";
     }
@@ -57,13 +61,11 @@ public class CalendarController {
         List<Week> weeks = new ArrayList<>();
         LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
         int startDayOfWeek = firstDayOfMonth.getDayOfWeek().getValue();
-
         List<Day> days = new ArrayList<>();
         addEmptyDaysIfNecessary(startDayOfWeek, days);
 
         int currentDay = 1;
         int daysInMonth = firstDayOfMonth.lengthOfMonth();
-
         while (currentDay <= daysInMonth) {
             Day day = createDay(firstDayOfMonth, currentDay);
             days.add(day);
@@ -74,7 +76,6 @@ public class CalendarController {
                 days.clear();
             }
         }
-
         addEmptyDaysAtMonthEnd(currentDay, days, daysInMonth, weeks);
 
         return weeks;

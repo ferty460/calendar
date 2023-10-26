@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>Календарь</title>
+    <title>Календарь | Авторизация</title>
 </head>
 <body class="d-flex h-100 text-center text-dark">
 <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column min-vh-100">
@@ -12,16 +12,16 @@
     <div class="mb-auto" th:replace="blocks/header.html :: header"></div>
 
     <main>
-        <h3 class="title">Авторизация</h3>
+        <h3 class="title mb-3">Авторизация</h3>
 
-        <form th:action="@{/login}" th:method="post">
+        <form th:action="@{/login}" th:method="post" style="width: 30%; margin: 0 auto;">
             <label for="username">Введите имя пользователя</label><br>
-            <input id="username" type="text" name="username" placeholder="Имя пользователя"><br><br>
+            <input id="username" type="text" name="username" placeholder="Имя пользователя" class="form-control"><br><br>
 
-            <label for="password">Введите имя пользователя</label><br>
-            <input id="password" type="password" name="password" placeholder="Пароль"><br><br>
+            <label for="password">Введите пароль</label><br>
+            <input id="password" type="password" name="password" placeholder="Пароль" class="form-control"><br><br>
 
-            <input type="submit" value="Вход">
+            <input type="submit" value="Вход" class="btn btn-dark">
         </form>
         <a href="/registration">Зарегистрироваться</a>
     </main>

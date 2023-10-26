@@ -23,12 +23,16 @@ public class Event {
     private String name;
     private String description;
 
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn
+    private User user;
+
     // --------  IMAGES  --------
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "event")
     private List<Image> images = new ArrayList<>();
     private Long previewImageId;
 
-    public void addImageToProduct(Image image) {
+    public void addImageToEvent(Image image) {
         image.setEvent(this);
         images.add(image);
     }

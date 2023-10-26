@@ -15,7 +15,7 @@
     <div class="container d-flex justify-content-evenly mt-5 mb-5">
         <div class="d-flex flex-row flex-wrap justify-content-between mt-5 mb-5">
             <div class="justify-content-center">
-                <form action="/event/add" method="post" th:object="${event}" enctype="multipart/form-data">
+                <form th:action="@{/event/add}" method="post" th:object="${event}" enctype="multipart/form-data">
                     <div>
                         <div>
                             <input type="text" name="name" placeholder="Название" th:field="*{name}" class="form-control" required><br>
@@ -37,7 +37,8 @@
         <div>
             <h3>Список событий</h3>
 
-            <table class="table table-bordered">
+            <div th:if="${events.isEmpty()}"><h4>Событий нет</h4></div>
+            <table th:if="${not events.isEmpty()}" class="table table-bordered">
                 <thead>
                 <tr class="table-secondary text-dark">
                     <th>name</th>

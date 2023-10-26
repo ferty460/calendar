@@ -28,10 +28,9 @@ public class UserService {
 
     public boolean save(User user) {
         if (userRepository.findByUsername(user.getUsername()) != null) return false;
-
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add(Role.ROLE_USER);
+        user.getRoles().add(Role.ROLE_ADMIN);
         userRepository.save(user);
 
         log.info("Saving new User with username: {}", user.getUsername());
@@ -41,5 +40,19 @@ public class UserService {
     public void delete(Long id) {
         userRepository.deleteById(id);
         log.info("Deleting user with id: {}", id);
+    }
+
+    public void banUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
+            if (user.isActive()) {
+                user.setActive(false);
+                log.info("Ban user with id = {}", user.getId());
+            } else {
+                user.setActive(true);
+                log.info("Unban user with id = {}", user.getId());
+            }
+        }
+        userRepository.save(user);
     }
 }

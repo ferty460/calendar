@@ -1,6 +1,7 @@
 package com.example.calendar.controller;
 
 import com.example.calendar.model.Event;
+import com.example.calendar.model.User;
 import com.example.calendar.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,22 +22,27 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping("/")
-    public String main() {
+    public String main(Principal principal, Model model) {
+        model.addAttribute("user", eventService.getUserByPrincipal(principal));
+
         return "main";
     }
 
     @GetMapping("/event")
-    public String getAllEvents(Model model) {
-        model.addAttribute("events", eventService.getAllEvents());
+    public String getAllEvents(Principal principal, Model model) {
+        User user = eventService.getUserByPrincipal(principal);
+        model.addAttribute("events", eventService.getAllByUser(user));
         model.addAttribute("event", new Event());
+        model.addAttribute("user", user);
 
         return "event";
     }
 
     @GetMapping("/event/{id}")
-    public String eventInfo(@PathVariable Long id, Model model) {
+    public String eventInfo(@PathVariable Long id, Principal principal, Model model) {
         model.addAttribute("event", eventService.getEventById(id));
         model.addAttribute("images", eventService.getEventById(id).getImages());
+        model.addAttribute("user", eventService.getUserByPrincipal(principal));
 
         return "event-info";
     }
@@ -47,16 +54,17 @@ public class EventController {
             @RequestParam("file1") MultipartFile file1,
             @RequestParam("file2") MultipartFile file2,
             @RequestParam("file3") MultipartFile file3,
+            Principal principal,
             Model model) throws IOException {
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date date = format.parse(dateString);
             event.setDate(date);
-            eventService.save(event, file1, file2, file3);
+            eventService.save(principal, event, file1, file2, file3);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        model.addAttribute("events", eventService.getAllEvents());
+        model.addAttribute("events", eventService.getAllByUser(eventService.getUserByPrincipal(principal)));
 
         return "redirect:/event";
     }
