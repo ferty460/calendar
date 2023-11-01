@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -23,7 +24,23 @@ public class CalendarController {
 
     @GetMapping("/calendar")
     public String showCalendar(Principal principal, Model model) {
-        List<Month> months = generateCalendarMonths(LocalDate.now().getYear());
+        int year = LocalDate.now().getYear();
+        List<Month> months = generateCalendarMonths(year);
+        calendarDetails(principal, months, model, year);
+
+        return "calendar";
+    }
+
+    @GetMapping("/calendar/changeYear")
+    public String changeCalendarYear(@RequestParam("year") Integer year, Principal principal, Model model) {
+        if (year == null) year = LocalDate.now().getYear();
+        List<Month> months = generateCalendarMonths(year);
+        calendarDetails(principal, months, model, year);
+
+        return "calendar";
+    }
+
+    private void calendarDetails(Principal principal, List<Month> months, Model model, Integer year) {
         String[] monthNames = {
                 "Январь", "Февраль",
                 "Март", "Апрель", "Май",
@@ -31,6 +48,7 @@ public class CalendarController {
                 "Сентябрь", "Октябрь", "Ноябрь",
                 "Декабрь"
         };
+        int[] years = {2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030};
         User user = eventService.getUserByPrincipal(principal);
 
         model.addAttribute("monthNames", monthNames);
@@ -38,10 +56,9 @@ public class CalendarController {
         model.addAttribute("events", eventService.getAllByUser(user));
         model.addAttribute("nearestEvents", eventService.getNearestEvents(user));
         model.addAttribute("user", user);
-
-        return "calendar";
+        model.addAttribute("years", years);
+        model.addAttribute("selectedYear", year);
     }
-
 
     private List<Month> generateCalendarMonths(int year) {
         List<Month> months = new ArrayList<>();

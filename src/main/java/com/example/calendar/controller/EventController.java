@@ -49,13 +49,14 @@ public class EventController {
 
     @PostMapping("/event/add")
     public String addEvent(
-            @ModelAttribute("event") Event event,
-            @RequestParam("dateString") String dateString,
-            @RequestParam("file1") MultipartFile file1,
-            @RequestParam("file2") MultipartFile file2,
-            @RequestParam("file3") MultipartFile file3,
-            Principal principal,
-            Model model) throws IOException {
+            @ModelAttribute("event") Event event, @RequestParam("dateString") String dateString,
+            @RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2,
+            @RequestParam("file3") MultipartFile file3, Principal principal, Model model
+    ) throws IOException {
+        if (file1.isEmpty() && file2.isEmpty() && file3.isEmpty()) {
+            model.addAttribute("error", "Необходимо загрузить хотя бы один файл");
+            return "redirect:/event";
+        }
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date date = format.parse(dateString);

@@ -17,19 +17,19 @@
   <main>
     <h3 class="title mb-3">Регистрация</h3>
 
+    <div th:if="${error}" class="alert-warning mt-3 col-3" style="margin: 0 auto; border-radius: 5px;">
+      <p th:text="${error}"></p>
+    </div>
+
     <form th:method="post" th:action="@{/registration}" style="width: 30%; margin: 0 auto;">
       <label for="username">Введите имя пользователя</label><br>
       <input id="username" type="text" name="username" placeholder="Имя пользователя" class="form-control"><br><br>
 
-      <label for="password">Введите имя пользователя</label><br>
+      <label for="password">Введите пароль</label><br>
       <input id="password" type="password" name="password" placeholder="Пароль" class="form-control"><br><br>
 
       <input type="submit" value="Зарегистрироваться" class="btn btn-dark">
     </form>
-
-    <div th:if="${error}" class="alert-warning">
-      <p th:text="${error}"></p>
-    </div>
   </main>
 
   <div class="mt-auto" th:replace="blocks/footer.html :: footer"></div>

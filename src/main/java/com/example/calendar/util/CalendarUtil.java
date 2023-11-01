@@ -11,11 +11,12 @@ import java.util.List;
 @Component
 public class CalendarUtil {
 
-    public String checkEventsInDay(List<Event> events, Day day, Month month) {
+    public String checkEventsInDay(List<Event> events, Day day, Month month, Integer year) {
         StringBuilder result = new StringBuilder();
         for (Event event : events) {
             if (getDay(event).equals(String.valueOf(day.getDayOfMonth()))
-                    && getMonth(event).equals(String.valueOf(month.getMonth()))) {
+                    && getMonth(event).equals(String.valueOf(month.getMonth()))
+                    && getYear(event).equals(String.valueOf(year))) {
                 result.append("\n");
                 result.append(event.getName());
             }
@@ -84,5 +85,9 @@ public class CalendarUtil {
 
     public String getMonth(Event event) {
         return event.getDate().toString().substring(5,7).replaceAll("^0+","");
+    }
+
+    public String getYear(Event event) {
+        return event.getDate().toString().substring(0,4).replaceAll("^0+","");
     }
 }
