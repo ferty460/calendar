@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +23,13 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull(message = "Название не может быть пустым")
+    @Pattern(regexp = "^[A-Za-zА-Яа-я\\-]+$")
+    @Size(min = 3, max = 30, message = "Название должно быть от 3 до 30 символов")
     private String name;
+
+    @NotNull(message = "Описание не может быть пустым")
     private String description;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
@@ -38,6 +47,7 @@ public class Event {
     }
 
     // --------  DATE  --------
+    @NotNull(message = "Дата не может быть пустой")
     private Date date;
     private LocalDateTime dateOfCreated;
     @PrePersist
