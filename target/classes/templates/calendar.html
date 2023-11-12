@@ -73,11 +73,11 @@
                         </thead>
                         <tbody>
                         <tr th:each="week : ${month.weeks}">
-                            <td class="table-cell tooltip1" th:each="day : ${week.days}">
+                            <td class="table-cell tooltip1" th:each="day : ${week.days}" th:classappend="${@calendarUtil.isEvent(events, day, month, selectedYear)} ? 'table-danger' : ''">
                                 <span th:if="${not day.isEmpty()}" th:text="${day.dayOfMonth}" class="table-cell-hover"></span>
                                 <div th:if="${not day.isEmpty()}" class="tooltiptext1">
                                     <span th:text="${day.dayOfMonth + ' ' + monthNames[month.month - 1]}"></span><br>
-                                    <span th:text="${@calendarUtil.checkEventsInDay(events, day, month)}"></span>
+                                    <span th:text="${@calendarUtil.checkEventsInDay(events, day, month, selectedYear)}"></span>
                                 </div>
                             </td>
                         </tr>
@@ -86,7 +86,7 @@
                     <div>
                         <table class="table">
                             <th:block th:each="event : ${events}">
-                                <th:block th:if="${@calendarUtil.getMonth(event) == '' + month.month}">
+                                <th:block th:if="${@calendarUtil.getMonth(event) == '' + month.month && @calendarUtil.getYear(event) == '' + selectedYear}">
                                     <tr>
                                         <td th:text="${event.getFormattedDate().replaceAll('^0+','')}"></td>
                                         <td><a th:text="${event.name}" th:href="@{/event/{id}(id=${event.id})}"></a></td>
@@ -99,6 +99,18 @@
             </div>
 
             <div class="d-flex flex-column mb-5" style="width: 25%; padding: 0 15px;">
+                <div class="mt-5">
+                    <form th:action="@{/calendar/changeYear}" th:method="get" class="form-inline">
+                        <div class="form-group">
+                            <label for="year" class="mr-2 mb-2">Выберите год:</label>
+                            <select id="year" name="year" class="form-control mr-2 mb-2">
+                                <option th:each="year : ${years}" th:value="${year}" th:text="${year}" th:selected="${year == selectedYear}" class="form-control"></option>
+                            </select>
+                            <button type="submit" class="btn btn-dark">Изменить год</button>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="card mt-5" style="max-height: 100%; padding-bottom: 25px; margin-bottom: 25px;">
                     <div class="card-body">
                         <h3 class="card-title" th:text="${@calendarUtil.getDayOfMonth() + ' ' + @calendarUtil.getMonth()}"></h3>
@@ -107,8 +119,8 @@
                     <div th:if="${events.isEmpty()}"><h4>Событий нет</h4></div>
                     <ul th:if="${not events.isEmpty()}" class="list-group list-group-flush">
                         <th:block th:each="event : ${events}">
-                            <th:block th:if="${event.getDate().toString().substring(5,7).replaceAll('^0+','') == '' + @calendarUtil.getMonthValue()
-                                                && event.getDate().toString().substring(8,10).replaceAll('^0+','') == @calendarUtil.getDayOfMonth()}">
+                            <th:block th:if="${@calendarUtil.getMonth(event) == '' + @calendarUtil.getMonthValue()
+                                                && @calendarUtil.getDay(event) == @calendarUtil.getDayOfMonth()}">
                                 <li class="list-group-item">
                                     <a th:text="${event.name}" th:href="@{/event/{id}(id=${event.id})}"></a>
                                 </li>

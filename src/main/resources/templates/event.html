@@ -17,9 +17,6 @@
             <div class="justify-content-center">
                 <form th:action="@{/event/add}" method="post" th:object="${event}" enctype="multipart/form-data">
                     <div>
-                        <div th:if="${error}" class="alert-warning mt-3 col-3" style="margin: 0 auto; border-radius: 5px;">
-                            <p th:text="${error}"></p>
-                        </div>
                         <div>
                             <input type="text" name="name" placeholder="Название" th:field="*{name}" class="form-control" required><br>
                             <input type="text" name="description" placeholder="Описание" th:field="*{description}" class="form-control" required><br>

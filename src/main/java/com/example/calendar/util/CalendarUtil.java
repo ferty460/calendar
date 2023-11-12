@@ -25,17 +25,13 @@ public class CalendarUtil {
         return result.toString();
     }
 
-    public String checkEventsInDay(List<Event> events, String day, String month) {
-        StringBuilder result = new StringBuilder();
+    public boolean isEvent(List<Event> events, Day day, Month month, Integer year) {
         for (Event event : events) {
-            if (getDay(event).equals(day)
-                    && getMonth(event).equals(month)) {
-                result.append("\n");
-                result.append(event.getName());
-            }
+            if (getDay(event).equals(String.valueOf(day.getDayOfMonth()))
+                    && getMonth(event).equals(String.valueOf(month.getMonth()))
+                    && getYear(event).equals(String.valueOf(year))) return true;
         }
-
-        return result.toString();
+        return false;
     }
 
     public String getDayOfMonth() {

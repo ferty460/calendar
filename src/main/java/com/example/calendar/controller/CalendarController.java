@@ -5,13 +5,15 @@ import com.example.calendar.model.date.Day;
 import com.example.calendar.model.date.Month;
 import com.example.calendar.model.date.Week;
 import com.example.calendar.service.EventService;
+import com.example.calendar.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,26 +23,29 @@ import java.util.List;
 public class CalendarController {
 
     private final EventService eventService;
+    private final UserService userService;
 
     @GetMapping("/calendar")
-    public String showCalendar(Principal principal, Model model) {
+    public String showCalendar(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         int year = LocalDate.now().getYear();
         List<Month> months = generateCalendarMonths(year);
-        calendarDetails(principal, months, model, year);
+        User user = userService.getUserByUsername(userDetails.getUsername());
+        calendarDetails(user, months, model, year);
 
         return "calendar";
     }
 
     @GetMapping("/calendar/changeYear")
-    public String changeCalendarYear(@RequestParam("year") Integer year, Principal principal, Model model) {
+    public String changeCalendarYear(@RequestParam("year") Integer year, @AuthenticationPrincipal UserDetails userDetails, Model model) {
         if (year == null) year = LocalDate.now().getYear();
         List<Month> months = generateCalendarMonths(year);
-        calendarDetails(principal, months, model, year);
+        User user = userService.getUserByUsername(userDetails.getUsername());
+        calendarDetails(user, months, model, year);
 
         return "calendar";
     }
 
-    private void calendarDetails(Principal principal, List<Month> months, Model model, Integer year) {
+    private void calendarDetails(User user, List<Month> months, Model model, Integer year) {
         String[] monthNames = {
                 "Январь", "Февраль",
                 "Март", "Апрель", "Май",
@@ -49,13 +54,11 @@ public class CalendarController {
                 "Декабрь"
         };
         int[] years = {2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030};
-        User user = eventService.getUserByPrincipal(principal);
 
         model.addAttribute("monthNames", monthNames);
         model.addAttribute("months", months);
         model.addAttribute("events", eventService.getAllByUser(user));
         model.addAttribute("nearestEvents", eventService.getNearestEvents(user));
-        model.addAttribute("user", user);
         model.addAttribute("years", years);
         model.addAttribute("selectedYear", year);
     }

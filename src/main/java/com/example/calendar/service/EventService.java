@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -37,8 +39,12 @@ public class EventService {
         return eventRepository.findById(id).orElse(null);
     }
 
-    public void save(Principal principal, Event event, MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException {
-        event.setUser(getUserByPrincipal(principal));
+    public void save(User user, String dateString, Event event, MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException, ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = format.parse(dateString);
+        event.setDate(date);
+
+        event.setUser(user);
         addImage(file1, true, event);
         addImage(file2, false, event);
         addImage(file3, false, event);

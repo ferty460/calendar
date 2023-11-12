@@ -73,7 +73,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="week : ${month.weeks}">
-                            <td class="table-cell tooltip1" th:each="day : ${week.days}">
+                            <td class="table-cell tooltip1" th:each="day : ${week.days}" th:classappend="${@calendarUtil.isEvent(events, day, month, selectedYear)} ? 'table-danger' : ''">
                                 <span th:if="${not day.isEmpty()}" th:text="${day.dayOfMonth}" class="table-cell-hover"></span>
                                 <div th:if="${not day.isEmpty()}" class="tooltiptext1">
                                     <span th:text="${day.dayOfMonth + ' ' + monthNames[month.month - 1]}"></span><br>

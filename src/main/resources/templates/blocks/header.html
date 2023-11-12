@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,19 +16,19 @@
             <h3 class="float-md-start mb-0">Календарь</h3>
         </a>
     
-        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-            <li th:if="${user.getUsername() != null}"><a href="/calendar" class="nav__link nav-link px-2 link-dark">Мой календарь</a></li>
-            <li th:if="${user.getUsername() != null}"><a href="/event" class="nav__link nav-link px-2 link-dark">Управление событиями</a></li>
-            <li th:if="${user.getUsername() != null}"><a href="/profile" class="nav__link nav-link px-2 link-dark">Профиль</a></li>
-            <li th:if="${user.isAdmin()}"><a href="/admin" class="nav__link nav-link px-2 link-dark">Панель администратора</a></li>
+        <ul sec:authorize="isAuthenticated()" class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/calendar" class="nav__link nav-link px-2 link-dark">Мой календарь</a></li>
+            <li><a href="/event" class="nav__link nav-link px-2 link-dark">Управление событиями</a></li>
+            <li><a href="/profile" class="nav__link nav-link px-2 link-dark">Профиль</a></li>
+            <li sec:authorize="hasAuthority('ROLE_ADMIN')"><a href="/admin" class="nav__link nav-link px-2 link-dark">Панель администратора</a></li>
         </ul>
     
-        <div th:if="${user.getUsername() == null}" class="col-md-3 text-end">
+        <div sec:authorize="isAnonymous()" class="col-md-3 text-end">
             <a href="/login" class="btn btn-outline-dark me-2">Войти</a>
             <a href="/registration" class="btn btn-outline-dark me-2">Зарегистрироваться</a>
         </div>
 
-        <div th:if="${user.getUsername() != null}" class="col-md-3 text-end">
+        <div sec:authorize="isAuthenticated()" class="col-md-3 text-end">
             <form th:action="@{/logout}" method="post">
                 <input type="submit" value="Выйти" class="btn btn-outline-dark me-2">
             </form>
