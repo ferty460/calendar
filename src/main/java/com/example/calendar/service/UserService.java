@@ -27,7 +27,8 @@ public class UserService {
     }
 
     public boolean save(User user) {
-        if (userRepository.findByUsername(user.getUsername()) != null) return false;
+        if (userRepository.findByUsername(user.getUsername()) != null
+                || userRepository.findByEmail(user.getEmail()) != null) return false;
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(Role.ROLE_ADMIN);

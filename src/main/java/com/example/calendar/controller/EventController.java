@@ -9,9 +9,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -23,7 +25,7 @@ public class EventController {
     private final UserService userService;
 
     @GetMapping("/")
-    public String main() {
+    public String index() {
         return "main";
     }
 
@@ -46,10 +48,13 @@ public class EventController {
 
     @PostMapping("/event/add")
     public String addEvent(
-            @ModelAttribute("event") Event event, @RequestParam("dateString") String dateString,
-            @RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2,
-            @RequestParam("file3") MultipartFile file3, @AuthenticationPrincipal UserDetails userDetails, Model model
+            @Valid @ModelAttribute("event") Event event, @RequestParam("dateString") String dateString,
+            @RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2, @RequestParam("file3") MultipartFile file3,
+            @AuthenticationPrincipal UserDetails userDetails, BindingResult result, Model model
     ) throws IOException, ParseException {
+        if (result.hasErrors()) {
+            return "event";
+        }
         User user = userService.getUserByUsername(userDetails.getUsername());
         eventService.save(user, dateString, event, file1, file2, file3);
 

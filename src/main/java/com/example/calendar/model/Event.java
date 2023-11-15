@@ -47,7 +47,6 @@ public class Event {
     }
 
     // --------  DATE  --------
-    @NotNull(message = "Дата не может быть пустой")
     private Date date;
     private LocalDateTime dateOfCreated;
     @PrePersist

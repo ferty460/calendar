@@ -23,13 +23,13 @@
 
     <form th:method="post" th:action="@{/registration}" style="width: 30%; margin: 0 auto;">
       <label for="username">Введите имя пользователя</label><br>
-      <input id="username" type="text" name="username" placeholder="Имя пользователя" class="form-control"><br><br>
+      <input id="username" type="text" name="username" placeholder="Имя пользователя" class="form-control" required><br><br>
 
-<!--      <label for="email">Введите email пользователя</label><br>-->
-<!--      <input id="email" type="email" name="email" placeholder="Email пользователя" class="form-control"><br><br>-->
+      <label for="email">Введите email пользователя</label><br>
+      <input id="email" type="email" name="email" placeholder="Email пользователя" class="form-control" required><br><br>
 
       <label for="password">Введите пароль</label><br>
-      <input id="password" type="password" name="password" placeholder="Пароль" class="form-control"><br><br>
+      <input id="password" type="password" name="password" placeholder="Пароль" class="form-control" required><br><br>
 
       <input type="submit" value="Зарегистрироваться" class="btn btn-dark">
     </form>

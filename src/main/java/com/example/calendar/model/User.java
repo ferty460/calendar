@@ -25,15 +25,16 @@ public class User implements UserDetails {
     @Size(min = 3, max = 30, message = "Имя должно быть от 3 до 30 символов")
     private String username;
 
-    /*@NotNull(message = "Email не может быть пустым")
+    @NotNull(message = "Email не может быть пустым")
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
     @Size(min = 3, max = 50, message = "Email должен быть от 3 до 30 символов")
-    private String email;*/
+    private String email;
 
     @NotNull(message = "Пароль не может быть пустым")
     @Pattern(regexp = "^[^а-яА-Я]*$")
     @Size(min = 5, max = 60, message = "Пароль должен быть от 3 до 30 символов")
     private String password;
+
     private boolean active;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")

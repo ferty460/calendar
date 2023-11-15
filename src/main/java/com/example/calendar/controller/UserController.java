@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping("/registration")
     public String processRegistration(User user, Model model) {
         if (!userService.save(user)) {
-            model.addAttribute("error", "Пользователь с ником " + user.getUsername() + " уже существует!");
+            model.addAttribute("error", "Ник " + user.getUsername() + " или email " + user.getEmail() + " уже занят!");
             return "registration";
         }
 
