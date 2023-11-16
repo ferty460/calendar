@@ -14,19 +14,26 @@
     <main>
         <h3 class="title mt-3 mb-3">Авторизация</h3>
 
-        <form th:action="@{/login}" th:method="post" style="width: 30%; margin: 0 auto;">
-            <label for="username">Введите имя пользователя</label><br>
-            <input id="username" type="text" name="username" placeholder="Имя пользователя" class="form-control" required><br><br>
+        <div class="d-flex justify-content-evenly">
+            <div class="col-3">
+                <form th:action="@{/login}" th:method="post" style="margin: 0 auto;">
+                    <label for="username">Введите имя пользователя</label><br>
+                    <input id="username" type="text" name="username" placeholder="Имя пользователя" class="form-control" required><br><br>
 
-            <label for="email">Введите email пользователя</label><br>
-            <input id="email" type="email" name="email" placeholder="Email пользователя" class="form-control" required><br><br>
+                    <label for="email">Введите email пользователя</label><br>
+                    <input id="email" type="email" name="email" placeholder="Email пользователя" class="form-control" required><br><br>
 
-            <label for="password">Введите пароль</label><br>
-            <input id="password" type="password" name="password" placeholder="Пароль" class="form-control" required><br><br>
+                    <label for="password">Введите пароль</label><br>
+                    <input id="password" type="password" name="password" placeholder="Пароль" class="form-control" required><br><br>
 
-            <input type="submit" value="Вход" class="btn btn-dark">
-        </form>
-        <a href="/registration">Зарегистрироваться</a>
+                    <input type="submit" value="Вход" class="btn btn-dark">
+                </form>
+                <a href="/registration">Зарегистрироваться</a>
+            </div>
+            <div class="col-3">
+                <h4><a th:href="@{/oauth2/authorization/google}">Login with Google</a></h4>
+            </div>
+        </div>
     </main>
 
     <div class="mt-auto" th:replace="blocks/footer.html :: footer"></div>

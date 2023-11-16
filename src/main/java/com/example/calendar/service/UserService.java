@@ -38,11 +38,6 @@ public class UserService {
         return true;
     }
 
-    public void delete(Long id) {
-        userRepository.deleteById(id);
-        log.info("Deleting user with id: {}", id);
-    }
-
     public void banUser(Long id) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
