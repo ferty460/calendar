@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{css/card.css}">
     <title>Календарь | Управление событиями</title>
 </head>
 <body class="d-flex h-100 text-center text-dark">
@@ -13,8 +14,8 @@
     <div class="mb-auto" th:replace="blocks/header.html :: header"></div>
 
     <div class="container d-flex justify-content-evenly mt-5 mb-5">
-        <div class="d-flex flex-row flex-wrap justify-content-between mt-5 mb-5">
-            <div class="justify-content-center">
+        <div class="d-flex flex-row flex-wrap justify-content-between mt-5 mb-5" style="width:100%;">
+            <div style="margin: 0 auto;">
                 <form th:action="@{/event/add}" method="post" th:object="${event}" enctype="multipart/form-data">
                     <div>
                         <div>
@@ -34,28 +35,39 @@
             </div>
         </div>
 
-        <div>
+        <div style="width: 100%; margin-left: 2rem;">
             <h3>Список событий</h3>
 
             <div th:if="${events.isEmpty()}"><h4>Событий нет</h4></div>
-            <table th:if="${not events.isEmpty()}" class="table table-bordered">
-                <thead>
-                <tr class="table-secondary text-dark">
-                    <th>name</th>
-                    <th>description</th>
-                    <th>date</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="event : ${events}" class="table-light text-dark">
-                    <td th:text="${event.name}"></td>
-                    <td th:text="${event.description}"></td>
-                    <td th:text="${event.getFormattedDate()}"></td>
-                    <td><a th:href="@{/event/{id}(id=${event.id})}">Подробнее</a></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="row" th:if="${not events.isEmpty()}">
+                <div th:each="event : ${events}">
+                    <div class="card card-margin">
+                        <div class="card-header no-border">
+                            <h5 class="card-title">Событие</h5>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div class="widget-49">
+                                <div class="widget-49-title-wrapper">
+                                    <div class="widget-49-date-primary">
+                                        <span class="widget-49-date-day" th:text="${@calendarUtil.getDay(event)}"></span>
+                                        <span class="widget-49-date-month" th:with="value = ${@calendarUtil.getMonth(event)}" th:text="${@calendarUtil.getMonth(value)}"></span>
+                                    </div>
+                                    <div class="widget-49-meeting-info text-start">
+                                        <span class="widget-49-pro-title" th:text="${event.getName()}"></span>
+                                        <span class="widget-49-meeting-time" th:text="${event.getFormattedDate()}"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span th:text="${event.getDescription()}"></span>
+                                </div>
+                                <div class="widget-49-meeting-action">
+                                    <a th:href="@{/event/{id}(id=${event.id})}" class="btn btn-sm btn-flash-border-primary">Подробнее</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

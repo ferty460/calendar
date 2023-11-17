@@ -17,7 +17,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests()
-                .antMatchers("/", "/registration", "/oauth/**").permitAll()
+                .antMatchers("/", "/registration", "/oauth/**", "/resources/static/css/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
