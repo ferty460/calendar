@@ -8,8 +8,10 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
         crossorigin="anonymous">
   <style>
-    body {
-      background: #F4F7FD;
+    .btn-google {
+      color: #545454;
+      background-color: #ffffff;
+      box-shadow: 0 1px 2px 1px #ddd;
     }
   </style>
   <title>Календарь | Регистрация</title>
@@ -43,7 +45,13 @@
         <a href="/login">Войти</a>
       </div>
       <div class="col-3">
-        <h4><a th:href="@{/oauth2/authorization/google}">Login with Google</a></h4>
+        <div class="row">
+          <div class="col-md-12">
+            <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" th:href="@{/oauth2/authorization/google}">
+              <img src="https://img.icons8.com/color/16/000000/google-logo.png"> Login with Google
+            </a>
+          </div>
+        </div>
       </div>
     </div>
 

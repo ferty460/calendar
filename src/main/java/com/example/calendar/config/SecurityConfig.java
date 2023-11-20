@@ -1,5 +1,6 @@
 package com.example.calendar.config;
 
+import com.example.calendar.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -27,9 +31,11 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .defaultSuccessUrl("/")
                 .failureUrl("/login")
-            .and()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService)
+            .and().and()
                 .logout().logoutSuccessUrl("/login").permitAll()
-                .and().build();
+            .and().build();
     }
 
     @Bean
